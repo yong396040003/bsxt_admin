@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生操作</title>
+    <link rel="stylesheet" href="/static/X-admin/lib/layui/css/layui.css" media="all">
+    <script src="/static/X-admin/lib/layui/layui.js"></script>
+    <script src="/static/html/js/addStudent.js"></script>
+</head>
+<body>
+<!--添加学生/编辑学生-->
+<div id="addStudent" style="margin-top: 5px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item" style="display: none">
+            <div class="layui-inline">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-inline" style="width: 100px">
+                    <input type="number" name="id" readonly="readonly" required lay-verify="required" value="0"
+                           autocomplete="off"
+                           class="layui-input id">
+                </div>
+                <div class="layui-form-mid layui-word-aux">作为判断插入和修改的标识</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">学号</label>
+                <div class="layui-input-inline" style="width: 200px">
+                    <input type="number" name="number" required lay-verify="required" placeholder="请输入学号"
+                           autocomplete="off"
+                           class="layui-input number">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名"
+                           autocomplete="off"
+                           class="layui-input name">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input class="man" type="radio" name="sex" value="男" title="男" checked="checked">
+                <input class="girl" type="radio" name="sex" value="女" title="女">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">系别</label>
+                <div class="layui-input-inline">
+                    <select required lay-verify="required" autocomplete="off" class="no" id="skyx" name="no" lay-filter="no">
+                        <option value="">请选择学院</option>
+                        <option value="01">电气信息学院</option>
+                        <option value="02">土木工程学院</option>
+                        <option value="03">经济管理学院</option>
+                        <option value="04">人文学院</option>
+                        <option value="05">建筑管理学院</option>
+                        <option value="06">艺术设计学院</option>
+                        <option value="07">建筑学院</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select required lay-verify="required" autocomplete="off" class="grade" id="grade" name="grade" disabled lay-filter="grade">
+                        <option value="">请选择年级</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2011">2011</option>
+                        <option value="2010">2010</option>
+                        <option value="2009">2009</option>
+                        <option value="2008">2008</option>
+                        <option value="2007">2007</option>
+                        <option value="2006">2006</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select required lay-verify="required" autocomplete="off" class="profession" id="profession" name="profession" disabled lay-filter="profession">
+                        <option value="">请选择专业</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select autocomplete="off" class="classes" id="classes" name="classes" disabled lay-filter="classes">
+                        <option value="">请选择班级</option>
+                        <option value="1班">1班</option>
+                        <option value="2班">2班</option>
+                        <option value="3班">3班</option>
+                        <option value="4班">4班</option>
+                        <option value="5班">5班</option>
+                        <option value="6班">6班</option>
+                        <option value="7班">7班</option>
+                        <option value="8班">8班</option>
+                        <option value="9班">9班</option>
+                        <option value="10班">10班</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="phone" required lay-verify="required" placeholder="请输入电话"
+                           autocomplete="off"
+                           class="layui-input phone">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">email</label>
+                <div class="layui-input-inline">
+                    <input name="email" required lay-verify="required" class="layui-input email" id="email"
+                           type="email">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="submit" class="layui-btn submit" lay-submit="true" lay-filter="formDemo">立即提交</button>
+                <button id="reset" type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+                <button id="cancel" class="layui-btn layui-btn-primary">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

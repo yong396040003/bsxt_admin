@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>批量导出</title>
+    <link rel="stylesheet" href="/static/X-admin/lib/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<form class="layui-form" action="" style="margin-top: 5px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">page</label>
+        <div class="layui-input-inline">
+            <input type="text" name="page" required lay-verify="required" placeholder="请输入页码" autocomplete="off"
+                   class="layui-input" value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">limit</label>
+        <div class="layui-input-inline">
+            <input type="text" name="limit" required lay-verify="required" placeholder="请输入导出数量" autocomplete="off"
+                   class="layui-input" value="10">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">保存名称</label>
+        <div class="layui-input-inline">
+            <input id="name" type="text" name="name" required lay-verify="required" placeholder="请输入保存名称"
+                   autocomplete="off"
+                   class="layui-input name">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">保存格式</label>
+        <div class="layui-input-inline">
+            <select name="format" lay-verify="required">
+                <option value="">请选择保存格式</option>
+                <option value="xlsx" selected="selected">xlsx</option>
+                <option value="csv">csv</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script src="/static/X-admin/lib/layui/layui.js"></script>
+<script type="text/javascript" src="/static/lay_exts/excel.js"></script>
+
+<script th:inline="javascript">
+    layui.use(['form', 'jquery', 'layer'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            $.ajax({
+                type: 'POST',
+                url: "/selectAllBsxt.do",
+                data: '&page=' + data.field.page + '&limit=' + data.field.limit,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.count === 0) {
+                        layer.msg("对不起，没有可导出数据");
+                    } else {
+                        // 3. 执行导出函数，系统会弹出弹框
+                        LAY_EXCEL.exportExcel({sheet1: res.data}, data.field.name + '.' + data.field.format, data.field.format, null);
+                        layer.msg('成功导出' + res.count + '条数据');
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

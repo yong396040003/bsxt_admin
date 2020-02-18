@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>精确搜索</title>
+    <link rel="stylesheet" href="/static/X-admin/lib/layui/css/layui.css" media="all">
+    <script src="/static/X-admin/lib/layui/layui.js"></script>
+</head>
+<body>
+<!--精确搜索学生-->
+<div id="addStudent" style="margin-top: 5px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">学号</label>
+                <div class="layui-input-inline" style="width: 100px">
+                    <input type="number" name="number" placeholder="请输入学号"
+                           autocomplete="off"
+                           class="layui-input number">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" placeholder="请输入姓名"
+                           autocomplete="off"
+                           class="layui-input name">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">系别</label>
+                <div class="layui-input-inline">
+                    <select autocomplete="off" class="no" id="skyx" name="no" lay-filter="no">
+                        <option value="">请选择学院</option>
+                        <option value="01">电气信息学院</option>
+                        <option value="02">土木工程学院</option>
+                        <option value="03">经济管理学院</option>
+                        <option value="04">人文学院</option>
+                        <option value="05">建筑管理学院</option>
+                        <option value="06">艺术设计学院</option>
+                        <option value="07">建筑学院</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select class="grade" id="grade" name="grade" lay-filter="grade">
+                        <option value="">请选择年级</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2011">2011</option>
+                        <option value="2010">2010</option>
+                        <option value="2009">2009</option>
+                        <option value="2008">2008</option>
+                        <option value="2007">2007</option>
+                        <option value="2006">2006</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select class="profession" id="profession" name="profession" lay-filter="profession">
+                        <option value="">请选择专业</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select class="classes" id="classes" name="classes" lay-filter="classes">
+                        <option value="">请选择班级</option>
+                        <option value="1班">1班</option>
+                        <option value="2班">2班</option>
+                        <option value="3班">3班</option>
+                        <option value="4班">4班</option>
+                        <option value="5班">5班</option>
+                        <option value="6班">6班</option>
+                        <option value="7班">7班</option>
+                        <option value="8班">8班</option>
+                        <option value="9班">9班</option>
+                        <option value="10班">10班</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="submit" class="layui-btn submit submit" lay-submit="true" lay-filter="formDemo">立即提交
+                </button>
+                <button id="reset" type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+                <button id="cancel" class="layui-btn layui-btn-primary">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['table', 'jquery', 'layer', 'laydate', 'form', 'upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        $('#cancel').on('click', function () {
+            parent.layer.close(parent.layer.index);
+        });
+
+        //联动监听
+        //监听系别
+        form.on('select(no)', function (data) {
+            //根据系判断不同专业
+            loadProfession(data.value);
+        });
+
+        function loadProfession(no) {
+            $.ajax({
+                async: true,
+                type: 'get',
+                url: "/static/profession.json",
+                dataType: 'json',
+                success: function (res) {
+                    $('#profession').empty();
+                    $("#profession").append(new Option("请选择专业", ""));
+                    for (var i = 0; i < res.length; i++) {
+                        if (res[i].dm.substring(0, 2) === no) {
+                            var option = document.createElement("option");
+                            option.value = res[i].dm;
+                            option.text = res[i].dmmc;
+                            $('#profession').append(option);
+                            form.render();
+                        }
+                    }
+                }
+            });
+        }
+
+        var isOne = true;
+
+        var json;
+
+        //提交数据
+        form.on('submit(formDemo)', function (data) {
+
+            $.ajax({
+                async: true,
+                type: 'get',
+                url: "/static/profession.json",
+                dataType: 'json',
+                success: function (res) {
+                    for (var i = 0; i < res.length; i++) {
+                        if (res[i].dm === data.field.profession) {
+                            data.field.profession = res[i].dmmc;
+                            break;
+                        }
+                    }
+
+                    var no = ["电气信息学院", "土木工程学院", "经济管理学院", "人文学院", "建筑管理学院", "艺术设计学院", "建筑学院"];
+
+                    for (var i = 0; i < no.length; i++) {
+                        if (i === (data.field.no.substring(1) - 1)) {
+                            data.field.no = no[i];
+                        }
+                    }
+
+                    if (isOne) {
+                        isOne = false;
+                        json = data.field;
+                        parent.layer.close(parent.layer.index)
+                    } else {
+                        layer.msg("请不要重复提交");
+                    }
+
+                }
+            });
+
+            return false;
+        });
+
+        window.getJson = function () {
+            return json;
+        }
+
+    });
+</script>
+</body>
+</html>

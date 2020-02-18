@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yong.bsxt_admin.mapper.StudentMapper">
+	<sql id="BASE_TABLE">
+		student
+	</sql>
+	<sql id="BASE_COLUMN">
+        `id`,`number`,`name`,`password`,`sex`,
+        `no`,`grade`,`profession`,`classes`,
+        `phone`,`email`
+	</sql>
+	
+	<select id="selectStudentByNumberOrName" resultType="com.yong.bsxt_admin.pojo.Student">
+		SELECT
+		<include refid="BASE_COLUMN"/>
+		from `student` WHERE number LIKE "%${search}%" OR name LIKE "%${search}%"
+	</select>
+	
+	<select id="selectStudentByAccSearch" resultType="com.yong.bsxt_admin.pojo.Student">
+		SELECT
+		<include refid="BASE_COLUMN"/>
+		from `student` WHERE 1=1
+		<if test="student.number != 0">
+			AND number LIKE "%${student.number}%"
+		</if>
+		<if test="student.name != ''">
+			AND name LIKE "%${student.name}%"
+		</if>
+		<if test="student.no != ''">
+			AND `no` = "${student.no}"
+		</if>
+		<if test="student.grade != 0">
+			AND `grade` = "${student.grade}"
+		</if>
+		<if test="student.profession != ''">
+			AND profession = "${student.profession}"
+		</if>
+		<if test="student.classes != ''">
+			AND classes = "${student.classes}"
+		</if>
+	</select>
+	
+	<insert id="insertStudent">
+	INSERT INTO `student`(`number`,`name`,`password`,`sex`,`no`,
+	`grade`,`profession`,`classes`,`phone`,`email`)
+	VALUES("${student.number}","${student.name}","${student.password}","${student.sex}",
+	"${student.no}","${student.grade}","${student.profession}","${student.classes}",
+	"${student.phone}","${student.email}"
+	)
+	</insert>
+	
+	
+	<update id="updateStudent">
+		UPDATE `student` SET number = ${student.number},name="${student.name}",
+		sex="${student.sex}",no="${student.no}",grade="${student.grade}",
+		profession="${student.profession}",
+		classes="${student.classes}",phone="${student.phone}",email="${student.email}"
+		WHERE id = "${student.id}"
+	</update>
+	
+	<delete id="deleteStudentByNumber">
+		DELETE FROM `student` WHERE number = ${number}
+	</delete>
+	
+	<delete id="bathDeleteStudentByNumber">
+		DELETE FROM `student` WHERE
+		<foreach collection="data" item="item" index="index" separator="or">
+			`number` = ${data[index]}
+		</foreach>
+	
+	</delete>
+	
+	<insert id="uploadStudentExcel" parameterType="java.util.List">
+		INSERT INTO `student`(`number`,`name`,`password`,`sex`,`no`,
+		`grade`,`profession`,`classes`,`phone`,`email`)
+		VALUES
+		<foreach collection="studentList" item="student" index="index" separator=",">
+			(
+			"${student.number}","${student.name}","${student.password}","${student.sex}",
+			"${student.no}","${student.grade}","${student.profession}","${student.classes}",
+			"${student.phone}","${student.email}"
+			)
+		</foreach>
+	</insert>
+</mapper>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>选题操作</title>
+    <link rel="stylesheet" href="/static/X-admin/lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/html/css/styles.css" media="all">
+    <script src="/static/X-admin/lib/layui/layui.js"></script>
+    <script src="/static/html/js/jquery-1.8.2.min.js"></script>
+    <script src="/static/html/js/jquery.autocomplete.js"></script>
+    <script src="/static/html/js/addBsxt.js"></script>
+</head>
+<body>
+<!--添加/编辑-->
+<div id="addBsxt" style="margin-top: 5px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item" style="display: none">
+            <div class="layui-inline">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-inline" style="width: 100px">
+                    <label>
+                        <input type="number" name="id" readonly="readonly" required lay-verify="required" value="0"
+                               autocomplete="off"
+                               class="layui-input id">
+                    </label>
+                </div>
+                <div class="layui-form-mid layui-word-aux">作为判断插入和修改的标识</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">题名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="title" required lay-verify="required" placeholder="请输入题目名字"
+                           autocomplete="off"
+                           class="layui-input title">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">出题老师</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="setTeacherNum" name="setTeacherNum" required lay-verify="required" placeholder="请输入姓名"
+                           autocomplete="on"
+                           class="layui-input setTeacherNum">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">人数上限</label>
+                <div class="layui-input-inline">
+                    <label>
+                        <input type="number" name="upperPeople" readonly="readonly" value="2"
+                               autocomplete="off"
+                               class="layui-input upperPeople">
+                    </label>
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color:#FFB400">*</span></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">任务要求</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入任务要求" required lay-verify="required" class="layui-textarea require" name="require"></textarea>
+                </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">具体内容</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入具体内容" required lay-verify="required" class="layui-textarea body" name="body"></textarea>
+                </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="submit" class="layui-btn submit" lay-submit="true" lay-filter="formDemo">立即提交</button>
+                <button id="reset" type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+                <button id="cancel" class="layui-btn layui-btn-primary">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yong.bsxt_admin.mapper.CommentMapper">
+    <sql id="BASE_TABLE">
+		`comment`
+	</sql>
+    <sql id="BASE_COLUMN">
+        `code`,`praise`,`number`,`name`,`msg`,`time`
+    </sql>
+
+    <insert id="insertComment">
+	INSERT INTO `comment`(`praise`,`number`,`name`,`msg`,`time`,`code`)
+	VALUES("${comment.praise}","${comment.number}","${comment.name}",
+	"${comment.msg}","${comment.time}","${comment.code}")
+	</insert>
+
+    <select id="selectAllComment" resultType="com.yong.bsxt_admin.pojo.Comment">
+        SELECT
+        <include refid="BASE_COLUMN" />
+        FROM
+        <include refid="BASE_TABLE" />
+        WHERE 1=1
+    </select>
+
+    <select id="selectCommentByCode" resultType="com.yong.bsxt_admin.pojo.Comment">
+        SELECT
+        <include refid="BASE_COLUMN" />
+        FROM
+        <include refid="BASE_TABLE" />
+        WHERE `code` = "${code}"
+    </select>
+
+    <delete id="deleteCommentByTime">
+		DELETE FROM `comment` WHERE `time` = "${time}"
+	</delete>
+
+    <delete id="bathDeleteCommentByTime">
+        DELETE FROM `comment` WHERE
+        <foreach collection="data" item="item" index="index" separator="or">
+            `time` = "${data[index]}"
+        </foreach>
+
+    </delete>
+
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yong.bsxt_admin.mapper.TeacherMapper">
+    <sql id="BASE_TABLE">
+		teacher
+	</sql>
+    <sql id="BASE_COLUMN">
+        `id`,`number`,`name`,`password`,`sex`,`no`,`phone`,`email`
+	</sql>
+
+    <select id="selectTeacherByNumberOrName" resultType="com.yong.bsxt_admin.pojo.Teacher">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        from `teacher` WHERE number LIKE "%${search}%" OR
+        name LIKE "%${search}%"
+    </select>
+
+    <select id="selectTeacherByAccSearch" resultType="com.yong.bsxt_admin.pojo.Teacher">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        from `teacher` WHERE 1=1
+        <if test="teacher.number != 0">
+            AND number LIKE "%${teacher.number}%"
+        </if>
+        <if test="teacher.name != ''">
+            AND name LIKE "%${teacher.name}%"
+        </if>
+        <if test="teacher.no != ''">
+            AND `no` = "${teacher.no}"
+        </if>
+    </select>
+
+    <insert id="insertTeacher">
+	INSERT INTO `teacher`(`number`,`name`,`password`,`sex`,`no`,`phone`,`email`)
+	VALUES(${teacher.number},"${teacher.name}","${teacher.password}","${teacher.sex}",
+	"${teacher.no}","${teacher.phone}","${teacher.email}"
+	)
+	</insert>
+
+
+    <update id="updateTeacher">
+		UPDATE `teacher` SET number = ${teacher.number},name="${teacher.name}",
+		sex="${teacher.sex}",no="${teacher.no}",phone="${teacher.phone}",email="${teacher.email}"
+		WHERE id = "${teacher.id}"
+	</update>
+
+    <delete id="deleteTeacherByNumber">
+		DELETE FROM `teacher` WHERE number = ${number}
+	</delete>
+
+    <delete id="bathDeleteTeacherByNumber">
+        DELETE FROM `teacher` WHERE
+        <foreach collection="data" item="item" index="index" separator="or">
+            `number` = ${data[index]}
+        </foreach>
+
+    </delete>
+
+    <insert id="uploadTeacherExcel" parameterType="java.util.List">
+        INSERT INTO `teacher`(`number`,`name`,`password`,`sex`,`no`,`phone`,`email`)
+        VALUES
+        <foreach collection="teacherList" item="teacher" index="index" separator=",">
+            (
+            ${teacher.number},"${teacher.name}","${teacher.password}","${teacher.sex}",
+            "${teacher.no}",
+            "${teacher.phone}","${teacher.email}"
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectTeacherByName" resultType="com.yong.bsxt_admin.pojo.Teacher">
+        SELECT teacher.name,teacher.number FROM `teacher` WHERE 1=1
+        <if test="query != ''">
+            AND teacher.name LIKE CONCAT('%',"${query}",'%')
+        </if>
+    </select>
+</mapper>

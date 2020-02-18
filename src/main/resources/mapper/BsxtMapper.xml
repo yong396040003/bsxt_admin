@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yong.bsxt_admin.mapper.BsxtMapper">
+    <sql id="BASE_TABLE">
+		`bsxt`
+	</sql>
+    <sql id="BASE_COLUMN">
+        `code`,`title`,`select_student_num`,`set_teacher_num`,`select_people`,`upper_people`,`require`,`body`
+	</sql>
+
+    <select id="selectBsxtByNumberOrName" resultType="com.yong.bsxt_admin.pojo.Bsxt">
+        SELECT bsxt.`id`,CONCAT_WS (",",student.`name`,stu.`name`) AS `name`,
+        `code`,`title`,`select_student_num`,
+        `set_teacher_num`,`select_people`,`upper_people`,`require`,`body`
+        FROM `bsxt`,`student`,`student` AS stu
+        WHERE bsxt.bsxt.title LIKE "%${search}%" OR bsxt.bsxt.set_teacher_num LIKE "%${search}%"
+        AND
+        (student.`number`= SUBSTRING_INDEX(bsxt.`select_student_num`,",",1)
+        AND stu.`number`=SUBSTRING_INDEX(bsxt.`select_student_num`,",",-1))
+    </select>
+
+    <select id="selectBsxtByAccSearch" resultType="com.yong.bsxt_admin.pojo.Bsxt">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        from `bsxt` WHERE 1=1
+        <if test="bsxt.number != 0">
+            AND number LIKE "%${bsxt.number}%"
+        </if>
+        <if test="bsxt.name != ''">
+            AND name LIKE "%${bsxt.name}%"
+        </if>
+        <if test="bsxt.no != ''">
+            AND `no` = "${bsxt.no}"
+        </if>
+        <if test="bsxt.grade != 0">
+            AND `grade` = "${bsxt.grade}"
+        </if>
+        <if test="bsxt.profession != ''">
+            AND profession = "${bsxt.profession}"
+        </if>
+        <if test="bsxt.classes != ''">
+            AND classes = "${bsxt.classes}"
+        </if>
+        <if test="${search}==''">
+            1=1 OR
+        </if>
+    </select>
+
+    <insert id="insertBsxt">
+	INSERT INTO `bsxt`( `code`,`title`,`select_student_num`,
+	`set_teacher_num`,`select_people`,
+	`upper_people`,`require`,`body`)
+	VALUES("${bsxt.code}","${bsxt.title}","${bsxt.selectStudentNum}",${bsxt.setTeacherNum},
+	${bsxt.selectPeople},${bsxt.upperPeople},"${bsxt.require}","${bsxt.body}"
+	)
+	</insert>
+
+
+    <update id="updateBsxt">
+		UPDATE `bsxt` SET title="${bsxt.title}",
+		set_teacher_num="${bsxt.setTeacherNum}",upper_people="${bsxt.upperPeople}",`require`="${bsxt.require}",
+		body="${bsxt.body}" WHERE id = "${bsxt.id}"
+	</update>
+
+     <delete id="deleteBsxtByNumber">
+		DELETE FROM `bsxt` WHERE code = "${code}"
+	</delete>
+
+    <delete id="bathDeleteBsxtByNumber">
+        DELETE FROM `bsxt` WHERE
+        <foreach collection="data" item="item" index="index" separator="or">
+            `code` = "${data[index]}"
+        </foreach>
+
+    </delete>
+
+    <insert id="uploadBsxtExcel" parameterType="java.util.List">
+        INSERT INTO `bsxt`(`number`,`name`,`password`,`sex`,`no`,
+        `grade`,`profession`,`classes`,`phone`,`email`)
+        VALUES
+        <foreach collection="bsxtList" item="bsxt" index="index" separator=",">
+            (
+            "${bsxt.number}","${bsxt.name}","${bsxt.password}","${bsxt.sex}",
+            "${bsxt.no}","${bsxt.grade}","${bsxt.profession}","${bsxt.classes}",
+            "${bsxt.phone}","${bsxt.email}"
+            )
+        </foreach>
+    </insert>
+</mapper>

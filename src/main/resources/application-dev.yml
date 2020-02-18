@@ -1,0 +1,36 @@
+server:
+  port: 80
+  #          172.21.0.8
+spring:
+  datasource:
+        name: bsxt
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+          filters: stat
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://172.21.0.8:3306/bsxt?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&rewriteBatchedStatements=true&useSSL=false
+          username: root
+          password: yong12345
+          initial-size: 1
+          min-idle: 1
+          max-active: 20
+          max-wait: 60000
+          time-between-eviction-runs-millis: 60000
+          min-evictable-idle-time-millis: 300000
+          validation-query: SELECT 'x'
+          test-while-idle: true
+          test-on-borrow: false
+          test-on-return: false
+          pool-prepared-statements: false
+          max-pool-prepared-statement-per-connection-size: 20
+  redis:
+    host: 49.233.93.71
+    port: 6379
+    password:
+#logging.level.com.yong.bsxt_admin: debug
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.yong.bsxt_admin.mapper
+  configuration:
+      map-underscore-to-camel-case: true
+logging.level.com.yong.bsxt_admin: debug
